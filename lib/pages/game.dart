@@ -9,7 +9,8 @@ class Game extends StatefulWidget {
 
 class _GameState extends State<Game> {
   Offset sizeOfAppBar = Offset(0, 0);
-  int sizeOfBoard = 4;
+  int sizeOfBoard = 3;
+  String bestScore = '0';
   String score = '0';
   String indentAlgorithm (String str){
     List indentedStr = [];
@@ -66,7 +67,7 @@ class _GameState extends State<Game> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Text('BEST SCORE',style: TextStyle(color: MyTheme.white,fontSize: 15,fontFamily: 'Poppins'),),
-                      Text(indentAlgorithm(score),style: TextStyle(color: MyTheme.white,fontSize: autoSizeTextAlg(indentAlgorithm(score)),fontFamily: 'Poppins'),)
+                      Text(indentAlgorithm(bestScore),style: TextStyle(color: MyTheme.white,fontSize: autoSizeTextAlg(indentAlgorithm(bestScore)),fontFamily: 'Poppins'),)
                     ],
                   ),
                 ),
@@ -76,7 +77,10 @@ class _GameState extends State<Game> {
           Board(
             boardSize: sizeOfBoard,
             screenSize: MediaQuery.of(context).size,
-            score: (int returnedScore) => setState(() => score = "$returnedScore"),
+            score: (int returnedScore) => setState(() {
+              score = "$returnedScore";
+              bestScore = int.parse(bestScore) > returnedScore ? bestScore : "$returnedScore";
+            }),
           ),
         ],
       ),

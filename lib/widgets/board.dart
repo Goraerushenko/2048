@@ -25,6 +25,7 @@ class _BoardState extends State<Board> with  TickerProviderStateMixin{
   int boardSize = 0;
   bool gestureFound = false;
   bool actionHappened = false;
+  bool isGameOver = false;
   Map<String, Color> colorOfCell = {
     '2': Colors.orange[50],
     '4': Colors.orange[100],
@@ -127,10 +128,8 @@ class _BoardState extends State<Board> with  TickerProviderStateMixin{
     int count = verticalGuest ? sY  : sX;
     while(_verification(_x, _y)){
       if(_verification(_x, _y) && border[_y][_x] == '') {
-        print(border[_y][_x]);
         count -= verticalGuest ? gesture[0] : gesture[1];
       } else if(_weHaveElLikeThis(border[_y][_x], _x, _y)){
-        print(border[_y][_x]);
         count -= verticalGuest ? gesture[0] : gesture[1];
       }
       _x -= gesture[1];
@@ -238,7 +237,41 @@ class _BoardState extends State<Board> with  TickerProviderStateMixin{
     return moderatedBoarder;
   }
 
-  void _createBoard(){
+  void _clearBoard () {
+    setState(() {
+      gestureFound = false;
+      actionHappened = false;
+      colorOfCell = {
+        '2': Colors.orange[50],
+        '4': Colors.orange[100],
+        '8': Colors.orange[200],
+        '16': Colors.orange[300],
+        '32': Colors.orange[400],
+        '64': Colors.orange[500],
+        '128': Colors.orange[600],
+        '256': Colors.orange[700],
+        '512': Colors.orange[800],
+        '1024': Colors.orange[900],
+        '2048': Colors.deepOrange,
+      };
+      addController = [];
+      addAnimation = [];
+      listOfKeys = [];
+      transformController = [];
+      transformAnimation = [];
+      positionList = [];
+      border = [];
+      needToLook = true;
+      isGameOver = false;
+      widget.score(0);
+    });
+    _createBoard();
+    _boardWithRandomNum();
+    _boardWithRandomNum();
+
+  }
+
+  void _createBoard (){
     for(int i = 0; i < boardSize; i++){
       border.add([]);
       listOfKeys.add([]);
@@ -309,7 +342,6 @@ class _BoardState extends State<Board> with  TickerProviderStateMixin{
   @override
   void initState(){
     boardSize = widget.boardSize;
-
     _createBoard();
     _boardWithRandomNum();
     _boardWithRandomNum();
@@ -320,26 +352,28 @@ class _BoardState extends State<Board> with  TickerProviderStateMixin{
   Widget build(BuildContext context) {
     _findTheGesture();
     if(gestureFound && !actionHappened) {
-      if(!_gameOverAlgorithm()){
-        border = _firstStageOfTheAlgorithm (border, gesture);
-        _gameOverAlgorithm() ? print('GameOver') :
-          Future.delayed(
-              Duration(
-                  milliseconds: (
-                      ((boardSize * 10) * 1000) / 100 - ((boardSize * 10) * 500) / 100
-                  ).toInt()
-              ),
+      border = _firstStageOfTheAlgorithm (border, gesture);
+      Future.delayed(
+          Duration(
+              milliseconds: (
+                  ((boardSize * 10) * 1000) / 100 - ((boardSize * 10) * 500) / 100
+              ).toInt()
+          ),
               () => setState(
-                      () {
-                        _boardWithRandomNum();
-                        widget.score(_calculateScore());
-                      }
-              )
-          );
-        y = 0.0;
-        x = 0.0;
-        actionHappened = true;
-      }
+                  () {
+                if(_gameOverAlgorithm()) {
+                  isGameOver = true;
+                  widget.score(_calculateScore());
+                } else
+                  _boardWithRandomNum();
+                  widget.score(_calculateScore());
+              }
+          )
+      );
+
+      y = 0.0;
+      x = 0.0;
+      actionHappened = true;
     }
 
     return GestureDetector(
@@ -409,10 +443,15 @@ class _BoardState extends State<Board> with  TickerProviderStateMixin{
                       ).toList(),
                     )).toList(),
                   ),
-                  _gameOverAlgorithm() ? Container(
-                    height: widget.screenSize.width - 50,
-                    width: widget.screenSize.width - 50,
-                    color: Colors.black54,
+                  isGameOver ? GestureDetector(
+                    onTap: () => _clearBoard(),
+                    child: Container(
+                      height: widget.screenSize.width - 50,
+                      width: widget.screenSize.width - 50,
+                      color: Colors.black54,
+                      alignment:  Alignment.center,
+                      child:  Text('Game Over', style: TextStyle(color: Colors.white, fontSize: 20),),
+                    ),
                   ) : SizedBox()
                 ],
               ),
