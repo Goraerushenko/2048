@@ -5,9 +5,9 @@ Copy of [2048](https://en.wikipedia.org/wiki/2048_(video_game)) on Flutter.
 ## Examples
 
 <p>
-    <img width="205px" alt="Example" src="https://raw.githubusercontent.com/Goraerushenko/2048/master/screenshots/board3.gif"/>
-    <img width="205px" alt="Example" src="https://raw.githubusercontent.com/Goraerushenko/2048/master/screenshots/board4.gif"/>
-    <img width="205px" alt="Example" src="https://raw.githubusercontent.com/Goraerushenko/2048/master/screenshots/gameOver.gif"/>
+    <img width="205px" alt="Example" src="https://raw.githubusercontent.com/Goraerushenko/2048/master/screenshots/board3.jpg"/>
+    <img width="205px" alt="Example" src="https://raw.githubusercontent.com/Goraerushenko/2048/master/screenshots/board4.jpg"/>
+    <img width="205px" alt="Example" src="https://raw.githubusercontent.com/Goraerushenko/2048/master/screenshots/gameOver.jpg"/>
     <img width="205px" alt="Example" src="https://raw.githubusercontent.com/Goraerushenko/2048/master/screenshots/gameProgress2.gif"/>
     <img width="205px" alt="Example" src="https://raw.githubusercontent.com/Goraerushenko/2048/master/screenshots/gameProgress5.gif"/>
 </p>
